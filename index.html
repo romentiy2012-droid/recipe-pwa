@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#008080">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Рецепты 98">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+  <title>Мои рецепты 98</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============ РАБОЧИЙ СТОЛ ============ -->
+  <div class="desktop">
+    <!-- Главное окно -->
+    <div class="window main-window" id="mainWindow">
+
+      <!-- Заголовок окна -->
+      <div class="title-bar">
+        <div class="title-bar-text">
+          <span class="title-icon">📁</span>
+          <span id="windowTitle">Мои рецепты — проводник</span>
+        </div>
+        <div class="title-bar-controls">
+          <button aria-label="Свернуть" id="btnMinimize" title="Свернуть">_</button>
+          <button aria-label="Развернуть" id="btnMaximize" title="Развернуть">□</button>
+          <button aria-label="Закрыть" id="btnClose" title="Закрыть">×</button>
+        </div>
+      </div>
+
+      <!-- Панель меню -->
+      <div class="menu-bar">
+        <button class="menu-item" data-menu="file" aria-haspopup="true">Файл</button>
+        <button class="menu-item" data-menu="edit" aria-haspopup="true">Правка</button>
+        <button class="menu-item" data-menu="view" aria-haspopup="true">Вид</button>
+        <button class="menu-item" data-menu="help" aria-haspopup="true">Справка</button>
+      </div>
+
+      <!-- Тонкая панель иконок (заменяет иконки рабочего стола) -->
+      <div class="quick-icons">
+        <button class="quick-icon-btn" id="iconRecipes" title="Все рецепты">
+          <span>📁</span><span class="qi-label">Рецепты</span>
+        </button>
+        <button class="quick-icon-btn" id="iconFav" title="Избранное">
+          <span>❤️</span><span class="qi-label">Избранное</span>
+        </button>
+        <button class="quick-icon-btn" id="iconAdd" title="Новый рецепт">
+          <span>➕</span><span class="qi-label">Создать</span>
+        </button>
+      </div>
+
+      <!-- Панель инструментов -->
+      <div class="toolbar">
+        <button class="toolbar-btn" id="addBtn" title="Создать новый рецепт">
+          <span class="tb-icon">📝</span>
+          <span class="tb-text">Создать</span>
+        </button>
+
+        <!-- Кнопка категорий с выпадающим списком -->
+        <div class="dropdown-wrap">
+          <button class="toolbar-btn dropdown-toggle" id="categoryToggle" title="Категории">
+            <span class="tb-icon">▼</span>
+            <span class="tb-text" id="categoryLabel">Все блюда</span>
+          </button>
+          <div class="dropdown-menu hidden" id="categoryMenu"></div>
+        </div>
+
+        <div class="toolbar-sep"></div>
+
+        <div class="toolbar-search">
+          <label>🔍</label>
+          <input type="search" id="searchInput" placeholder="Поиск...">
+        </div>
+      </div>
+
+      <!-- Панель адреса -->
+      <div class="address-bar">
+        <label>Адрес:</label>
+        <div class="address-field">
+          <span>📁</span>
+          <span>Мой компьютер\Рецепты</span>
+        </div>
+      </div>
+
+      <!-- Основная область -->
+      <div class="window-body">
+        <div class="content-area">
+          <div id="empty" class="empty">
+            <div class="empty-icon">📖</div>
+            <p>Пока нет рецептов</p>
+            <p class="empty-hint">Нажмите <b>Создать</b> на панели инструментов</p>
+          </div>
+          <div id="recipes" class="recipes"></div>
+        </div>
+      </div>
+
+      <!-- Строка состояния -->
+      <div class="status-bar">
+        <div class="status-item" id="statusCount">Объектов: 0</div>
+        <div class="status-item" id="statusFilter">Все категории</div>
+        <div class="status-item status-right" id="statusClock">00:00</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ МЕНЮ ПУСК ============ -->
+  <div class="start-menu hidden" id="startMenu">
+    <div class="start-menu-sidebar">
+      <span>Рецепты&nbsp;98</span>
+    </div>
+    <div class="start-menu-items">
+      <button class="start-menu-item" data-action="recipes">
+        <span class="smi-icon">📁</span>
+        <span class="smi-label">Мои рецепты</span>
+      </button>
+      <button class="start-menu-item" data-action="favorites">
+        <span class="smi-icon">❤️</span>
+        <span class="smi-label">Избранное</span>
+      </button>
+      <button class="start-menu-item" data-action="create">
+        <span class="smi-icon">➕</span>
+        <span class="smi-label">Создать рецепт</span>
+      </button>
+
+      <div class="start-menu-sep"></div>
+
+      <button class="start-menu-item" data-action="categories">
+        <span class="smi-icon">📂</span>
+        <span class="smi-label">Категории</span>
+        <span class="smi-arrow">▸</span>
+      </button>
+      <div class="start-submenu hidden" id="startSubCategories"></div>
+
+      <button class="start-menu-item" data-action="settings">
+        <span class="smi-icon">⚙️</span>
+        <span class="smi-label">Настройки</span>
+        <span class="smi-arrow">▸</span>
+      </button>
+      <div class="start-submenu hidden" id="startSubSettings">
+        <button class="start-menu-item" data-action="export">
+          <span class="smi-icon">📤</span>
+          <span class="smi-label">Экспорт рецептов…</span>
+        </button>
+        <button class="start-menu-item" data-action="import">
+          <span class="smi-icon">📥</span>
+          <span class="smi-label">Импорт рецептов…</span>
+        </button>
+        <button class="start-menu-item" data-action="clear-all">
+          <span class="smi-icon">🗑️</span>
+          <span class="smi-label">Очистить всё</span>
+        </button>
+      </div>
+
+      <div class="start-menu-sep"></div>
+
+      <button class="start-menu-item" data-action="about">
+        <span class="smi-icon">ℹ️</span>
+        <span class="smi-label">О программе</span>
+      </button>
+
+      <div class="start-menu-sep"></div>
+
+      <button class="start-menu-item" data-action="shutdown">
+        <span class="smi-icon">🔌</span>
+        <span class="smi-label">Завершение работы…</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ============ ПАНЕЛЬ ЗАДАЧ ============ -->
+  <div class="taskbar">
+    <button class="start-btn" id="startBtn">
+      <span class="start-logo">
+        <span class="win-flag">
+          <span class="flag-red"></span>
+          <span class="flag-green"></span>
+          <span class="flag-blue"></span>
+          <span class="flag-yellow"></span>
+        </span>
+      </span>
+      <span class="start-text">Пуск</span>
+    </button>
+    <div class="taskbar-sep"></div>
+    <div class="taskbar-tasks">
+      <button class="taskbar-task active">
+        <span>📁</span>
+        <span>Мои рецепты</span>
+      </button>
+    </div>
+    <div class="taskbar-tray">
+      <span id="trayClock">00:00</span>
+    </div>
+  </div>
+
+  <!-- ============ ОСНОВНАЯ МОДАЛКА (форма/детали) ============ -->
+  <div id="modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-sheet" id="modalSheet">
+      <div class="title-bar">
+        <div class="title-bar-text">
+          <span class="title-icon" id="modalIcon">📝</span>
+          <span id="modalTitle">Новый рецепт</span>
+        </div>
+        <div class="title-bar-controls">
+          <button type="button" aria-label="Закрыть" id="modalCloseBtn">×</button>
+        </div>
+      </div>
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- ============ МОДАЛКА: ДОБАВИТЬ КАТЕГОРИЮ ============ -->
+  <div id="catModal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-backdrop" data-close="catModal"></div>
+    <div class="modal-sheet modal-sheet-sm">
+      <div class="title-bar">
+        <div class="title-bar-text">
+          <span class="title-icon">📂</span>
+          <span>Новая категория</span>
+        </div>
+        <div class="title-bar-controls">
+          <button data-close="catModal">×</button>
+        </div>
+      </div>
+      <div class="modal-content">
+        <p style="margin-bottom: 8px;">Введите название новой категории:</p>
+        <input type="text" id="newCatName" placeholder="Например: Завтраки" maxlength="30">
+        <div class="actions">
+          <button class="btn-secondary" data-close="catModal">Отмена</button>
+          <button class="btn-primary" id="saveNewCatBtn">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- ============ УНИВЕРСАЛЬНЫЙ ДИАЛОГ ============ -->
+  <div id="dlg" class="modal hidden" role="alertdialog" aria-modal="true" aria-labelledby="dlgTitle">
+    <div class="modal-backdrop"></div>
+    <div class="modal-sheet modal-sheet-sm">
+      <div class="title-bar">
+        <div class="title-bar-text">
+          <span class="title-icon" id="dlgIcon">❓</span>
+          <span id="dlgTitle">Мои рецепты 98</span>
+        </div>
+        <div class="title-bar-controls">
+          <button type="button" aria-label="Закрыть" id="dlgCloseBtn">×</button>
+        </div>
+      </div>
+      <div class="modal-content">
+        <div class="dlg-body">
+          <span class="dlg-big" id="dlgBigIcon">❓</span>
+          <div id="dlgText" class="dlg-text"></div>
+        </div>
+        <div id="dlgExtra"></div>
+        <div class="actions" id="dlgActions"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ВЫПАДАЮЩЕЕ МЕНЮ-БАРА ============ -->
+  <div id="menuPop" class="dropdown-menu hidden" role="menu"></div>
+
+  <!-- ============ ЭКРАН ВЫКЛЮЧЕНИЯ ============ -->
+  <div id="shutdown" class="shutdown hidden" data-stage="splash">
+    <div id="sdSplash">Завершение работы…</div>
+    <div id="sdOff">
+      <p>Теперь питание компьютера<br>можно отключить.</p>
+      <p class="shutdown-hint">Нажмите любую клавишу или коснитесь экрана, чтобы включить компьютер</p>
+    </div>
+  </div>
+
+  <input type="file" id="importFile" accept=".json,application/json" hidden>
+
+  <!-- ============ TOAST ============ -->
+  <div id="toast" class="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

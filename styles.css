@@ -1,0 +1,1130 @@
+/* ============================================================
+   WINDOWS 98 STYLE — Мои рецепты (ПОЛНАЯ ВЕРСИЯ)
+   ============================================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --win-gray: #c0c0c0;
+  --win-gray-light: #dfdfdf;
+  --win-gray-dark: #808080;
+  --win-gray-darker: #404040;
+  --win-white: #ffffff;
+  --win-black: #000000;
+  --win-navy: #000080;
+  --win-blue: #1084d0;
+  --win-teal: #008080;
+  --win-yellow: #ffffcc;
+  --win-red: #ff0000;
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  font-family: "MS Sans Serif", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  line-height: 1.4;
+  background: var(--win-teal);
+  color: var(--win-black);
+  user-select: none;
+  -webkit-user-select: none;
+  overscroll-behavior: none;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  user-select: text;
+  -webkit-user-select: text;
+  font-size: 12px;
+}
+
+button {
+  font-family: inherit;
+  font-size: 12px;
+}
+
+/* ============ РАБОЧИЙ СТОЛ ============ */
+.desktop {
+  position: fixed;
+  inset: 0 0 32px 0;
+  background: var(--win-teal);
+  overflow: hidden;
+  padding: 6px;
+}
+
+/* ============ ОКНО ============ */
+.window {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  right: 6px;
+  bottom: 6px;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  box-shadow: 1px 1px 0 0 var(--win-gray-dark);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 2;
+}
+
+/* ============ ЗАГОЛОВОК ОКНА ============ */
+.title-bar {
+  background: linear-gradient(90deg, var(--win-navy) 0%, var(--win-blue) 100%);
+  color: #fff;
+  padding: 3px 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  height: 22px;
+}
+
+.title-bar-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: bold;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.title-bar-text .title-icon { font-size: 14px; }
+
+.title-bar-controls {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.title-bar-controls button {
+  width: 18px;
+  height: 16px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  color: var(--win-black);
+  font-size: 9px;
+  font-weight: bold;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.title-bar-controls button:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+/* ============ МЕНЮ ============ */
+.menu-bar {
+  display: flex;
+  background: var(--win-gray);
+  border-bottom: 1px solid var(--win-gray-dark);
+  padding: 0 2px;
+  flex-shrink: 0;
+  height: 20px;
+}
+
+.menu-item {
+  background: none;
+  border: none;
+  padding: 3px 8px;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--win-black);
+}
+
+.menu-item:hover,
+.menu-item:focus-visible {
+  background: var(--win-navy);
+  color: #fff;
+}
+
+/* ============ ТОНКАЯ ПАНЕЛЬ ИКОНОК ============ */
+.quick-icons {
+  display: flex;
+  gap: 4px;
+  padding: 3px 4px;
+  background: var(--win-gray);
+  border-bottom: 1px solid var(--win-gray-dark);
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.quick-icons::-webkit-scrollbar { display: none; }
+
+.quick-icon-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 11px;
+  color: var(--win-black);
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-family: inherit;
+}
+
+.quick-icon-btn:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.quick-icon-btn .qi-label {
+  font-size: 11px;
+}
+
+/* ============ ПАНЕЛЬ ИНСТРУМЕНТОВ ============ */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px;
+  background: var(--win-gray);
+  border-bottom: 1px solid var(--win-gray-dark);
+  flex-shrink: 0;
+}
+
+.toolbar-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--win-black);
+}
+
+.toolbar-btn:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.toolbar-btn .tb-icon { font-size: 14px; }
+
+.toolbar-sep {
+  width: 2px;
+  height: 20px;
+  margin: 0 2px;
+  border-left: 1px solid var(--win-gray-dark);
+  border-right: 1px solid var(--win-white);
+}
+
+.toolbar-search {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+  background: var(--win-white);
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  padding: 1px 3px;
+}
+
+.toolbar-search label {
+  font-size: 12px;
+  color: var(--win-gray-dark);
+}
+
+.toolbar-search input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  padding: 2px 0;
+  font-size: 12px;
+  min-width: 0;
+}
+
+/* ============ ВЫПАДАЮЩЕЕ МЕНЮ КАТЕГОРИЙ ============ */
+.dropdown-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle .tb-icon {
+  font-size: 10px;
+  color: var(--win-black);
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 180px;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  box-shadow: 3px 3px 0 rgba(0,0,0,.3);
+  z-index: 500;
+  padding: 2px;
+}
+
+.dropdown-menu.hidden { display: none; }
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--win-black);
+  text-align: left;
+  font-family: inherit;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus-visible {
+  background: var(--win-navy);
+  color: #fff;
+}
+
+.dropdown-item.active { font-weight: bold; }
+
+.dropdown-item .dd-check {
+  width: 12px;
+  display: inline-block;
+  text-align: center;
+}
+
+.dropdown-item .dd-count {
+  margin-left: auto;
+  font-size: 10px;
+  opacity: .7;
+}
+
+.dropdown-item.dd-add {
+  border-top: 1px solid var(--win-gray-dark);
+  margin-top: 2px;
+  padding-top: 6px;
+  color: var(--win-navy);
+  font-weight: bold;
+}
+
+.dropdown-item.dd-add:hover { color: #fff; }
+
+.dropdown-item .dd-del {
+  margin-left: auto;
+  font-size: 10px;
+  color: var(--win-red);
+  padding: 0 4px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dropdown-item:hover .dd-del { color: #ff8080; }
+
+/* ============ ПАНЕЛЬ АДРЕСА ============ */
+.address-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  background: var(--win-gray);
+  border-bottom: 1px solid var(--win-gray-dark);
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.address-field {
+  flex: 1;
+  background: var(--win-white);
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  padding: 2px 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  height: 22px;
+}
+
+/* ============ ОСНОВНАЯ ОБЛАСТЬ ============ */
+.window-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--win-white);
+  border: 1.5px solid;
+  border-color: var(--win-gray-dark) var(--win-white) var(--win-white) var(--win-gray-dark);
+  margin: 2px;
+}
+
+.content-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  background: var(--win-white);
+}
+
+.content-area::-webkit-scrollbar,
+.modal-content::-webkit-scrollbar {
+  width: 16px;
+}
+
+.content-area::-webkit-scrollbar-track,
+.modal-content::-webkit-scrollbar-track {
+  background: var(--win-gray-light);
+}
+
+.content-area::-webkit-scrollbar-thumb,
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+}
+
+/* ============ ПУСТОЕ СОСТОЯНИЕ ============ */
+.empty {
+  text-align: center;
+  color: var(--win-gray-dark);
+  padding: 40px 20px;
+  font-size: 12px;
+}
+.empty.hidden { display: none; }
+.empty-icon { font-size: 48px; margin-bottom: 8px; opacity: .6; }
+.empty p { margin-bottom: 4px; }
+.empty-hint { font-size: 11px; }
+.empty-hint b { color: var(--win-black); }
+
+/* ============ СЕТКА РЕЦЕПТОВ ============ */
+.recipes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 6px;
+}
+
+.recipe-card {
+  background: var(--win-white);
+  border: 1.5px solid transparent;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.recipe-card:hover,
+.recipe-card:focus-visible {
+  background: var(--win-navy);
+  color: #fff;
+}
+
+.recipe-card .img-wrap {
+  width: 64px;
+  height: 64px;
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  background: var(--win-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.recipe-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recipe-card .placeholder-img { font-size: 32px; }
+
+.recipe-card .info {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.recipe-card h3 {
+  font-size: 11px;
+  font-weight: normal;
+  line-height: 1.2;
+  word-break: break-word;
+  color: inherit;
+}
+
+.recipe-card .cat {
+  font-size: 10px;
+  color: var(--win-gray-dark);
+}
+
+.recipe-card:hover .cat { color: #c0c0c0; }
+
+/* ============ СТРОКА СОСТОЯНИЯ ============ */
+.status-bar {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  background: var(--win-gray);
+  border-top: 1px solid var(--win-white);
+  flex-shrink: 0;
+  font-size: 11px;
+  height: 22px;
+}
+
+.status-item {
+  padding: 2px 8px;
+  border: 1.5px solid;
+  border-color: var(--win-gray-dark) var(--win-white) var(--win-white) var(--win-gray-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.status-item:first-child { flex: 1; min-width: 0; }
+.status-right { min-width: 70px; text-align: center; }
+
+/* ============ ПАНЕЛЬ ЗАДАЧ ============ */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(32px + var(--sab));
+  padding-bottom: var(--sab);
+  background: var(--win-gray);
+  border-top: 2px solid;
+  border-color: var(--win-white) transparent transparent transparent;
+  display: flex;
+  align-items: center;
+  padding: 2px 4px;
+  gap: 4px;
+  z-index: 100;
+  box-shadow: 0 -1px 0 0 var(--win-gray-dark);
+}
+
+.start-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px 2px 2px;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  height: 24px;
+}
+
+.start-btn:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.start-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+}
+
+.win-flag {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 1px;
+  width: 16px;
+  height: 16px;
+  transform: skew(-10deg);
+}
+
+.flag-red { background: #f35325; }
+.flag-green { background: #81bc06; }
+.flag-blue { background: #05a6f0; }
+.flag-yellow { background: #ffba08; }
+
+.start-text {
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+  font-weight: bold;
+}
+
+.taskbar-sep {
+  width: 2px;
+  height: 22px;
+  border-left: 1px solid var(--win-gray-dark);
+  border-right: 1px solid var(--win-white);
+  margin: 0 2px;
+}
+
+.taskbar-tasks {
+  flex: 1;
+  display: flex;
+  gap: 3px;
+  overflow: hidden;
+}
+
+.taskbar-task {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  cursor: pointer;
+  font-size: 11px;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  height: 24px;
+}
+
+.taskbar-task.active {
+  background: var(--win-gray-light);
+  font-weight: bold;
+}
+
+.taskbar-tray {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-gray-dark) var(--win-white) var(--win-white) var(--win-gray-dark);
+  height: 24px;
+  font-size: 11px;
+}
+
+/* ============ МЕНЮ ПУСК ============ */
+.start-menu {
+  position: fixed;
+  bottom: calc(32px + var(--sab));
+  left: 2px;
+  display: flex;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  box-shadow: 3px -3px 0 rgba(0,0,0,.3);
+  z-index: 230;
+  max-height: calc(100vh - 60px - var(--sab));
+  overflow: hidden;
+}
+
+.start-menu.hidden { display: none; }
+
+.start-menu-sidebar {
+  width: 26px;
+  background: linear-gradient(to top, var(--win-navy), var(--win-blue));
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 8px 0;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
+.start-menu-items {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 3px;
+  min-width: 200px;
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+}
+
+.start-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  color: var(--win-black);
+  text-align: left;
+  font-family: inherit;
+  position: relative;
+}
+
+.start-menu-item:hover,
+.start-menu-item:focus-visible {
+  background: var(--win-navy);
+  color: #fff;
+}
+
+.start-menu-item .smi-icon {
+  font-size: 18px;
+  width: 22px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.start-menu-item .smi-label { flex: 1; }
+
+.start-menu-item .smi-arrow {
+  font-size: 10px;
+  opacity: .7;
+}
+
+.start-menu-sep {
+  height: 2px;
+  margin: 3px 4px;
+  border-top: 1px solid var(--win-gray-dark);
+  border-bottom: 1px solid var(--win-white);
+}
+
+.start-submenu {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  min-width: 180px;
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  box-shadow: 3px -3px 0 rgba(0,0,0,.3);
+  padding: 3px;
+  z-index: 160;
+}
+
+.start-submenu.hidden { display: none; }
+
+@media (max-width: 600px) {
+  .start-submenu {
+    position: static;
+    box-shadow: none;
+    border: 1px solid var(--win-gray-dark);
+    margin: 2px 0;
+    left: auto;
+    top: auto;
+  }
+}
+
+/* ============ МОДАЛЬНОЕ ОКНО ============ */
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+}
+.modal.hidden { display: none; }
+
+.modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.3);
+}
+
+.modal-sheet {
+  position: relative;
+  width: 100%;
+  max-width: 520px;
+  max-height: calc(100vh - 60px);
+  background: var(--win-gray);
+  border: 2px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  box-shadow: 2px 2px 0 0 var(--win-gray-dark);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.modal-sheet-sm { max-width: 340px; }
+
+.modal-content {
+  overflow-y: auto;
+  padding: 8px;
+  flex: 1;
+  background: var(--win-gray);
+}
+
+.modal-sheet-sm .modal-content { padding: 12px; }
+
+.modal-sheet-sm input[type="text"] {
+  width: 100%;
+  margin-top: 4px;
+  padding: 4px 6px;
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  background: var(--win-white);
+  font-size: 12px;
+  font-family: inherit;
+  outline: none;
+}
+
+/* ============ ФОРМА ============ */
+form label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: var(--win-black);
+}
+
+form input[type="text"],
+form input[type="search"],
+form textarea,
+form select {
+  width: 100%;
+  margin-top: 3px;
+  padding: 3px 4px;
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  background: var(--win-white);
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--win-black);
+  outline: none;
+}
+
+form textarea { resize: vertical; min-height: 60px; }
+form select { cursor: pointer; padding: 2px; }
+
+.file-input-wrap { margin-top: 3px; }
+
+.file-input-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 12px;
+  min-height: 32px;
+}
+
+.file-input-label:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.file-input-label input { display: none; }
+
+#imagePreviewWrap {
+  margin-bottom: 10px;
+  padding: 4px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+#imagePreviewWrap.hidden { display: none; }
+
+#imagePreview {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  background: var(--win-black);
+  display: block;
+}
+
+#removeImage {
+  margin-top: 4px;
+  padding: 3px 10px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 12px;
+  width: 100%;
+}
+
+#removeImage:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 10px;
+  justify-content: flex-end;
+  padding-top: 8px;
+  border-top: 1px solid var(--win-gray-dark);
+}
+
+.btn-primary,
+.btn-secondary {
+  padding: 4px 16px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--win-black);
+  min-width: 80px;
+  min-height: 26px;
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.btn-primary { font-weight: bold; }
+
+/* ============ ДЕТАЛИ РЕЦЕПТА ============ */
+.recipe-detail { padding: 4px; }
+
+.recipe-detail .main-img {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  background: var(--win-black);
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  margin-bottom: 8px;
+}
+
+.recipe-detail .detail-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.recipe-detail h2 {
+  font-size: 14px;
+  font-weight: bold;
+  flex: 1;
+  color: var(--win-navy);
+}
+
+.detail-fav-btn {
+  width: 32px;
+  height: 28px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.detail-fav-btn:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.recipe-detail .cat-badge {
+  display: inline-block;
+  background: var(--win-yellow);
+  border: 1px solid var(--win-gray-dark);
+  padding: 1px 8px;
+  font-size: 11px;
+  margin-bottom: 8px;
+}
+
+.recipe-detail .description {
+  font-size: 12px;
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.recipe-detail h3 {
+  font-size: 12px;
+  margin: 12px 0 6px;
+  color: var(--win-navy);
+  border-bottom: 1px solid var(--win-gray-dark);
+  padding-bottom: 3px;
+}
+
+.recipe-detail ul.ingredients-list {
+  list-style: none;
+  padding: 0;
+  background: var(--win-white);
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.recipe-detail ul.ingredients-list li {
+  padding: 3px 6px;
+  font-size: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.recipe-detail ul.ingredients-list li:last-child { border-bottom: none; }
+
+.recipe-detail .steps-text {
+  white-space: pre-wrap;
+  font-size: 12px;
+  line-height: 1.6;
+  background: var(--win-white);
+  border: 1.5px solid;
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+  padding: 6px;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+  padding-top: 8px;
+  border-top: 1px solid var(--win-gray-dark);
+}
+
+.detail-actions button {
+  flex: 1;
+  padding: 4px 8px;
+  background: var(--win-gray);
+  border: 1.5px solid;
+  border-color: var(--win-white) var(--win-gray-darker) var(--win-gray-darker) var(--win-white);
+  cursor: pointer;
+  font-size: 12px;
+  font-family: inherit;
+  min-height: 26px;
+}
+
+.detail-actions button:active {
+  border-color: var(--win-gray-darker) var(--win-white) var(--win-white) var(--win-gray-darker);
+}
+
+.edit-btn { font-weight: bold; }
+.delete-btn { color: var(--win-red); }
+
+/* ============ TOAST ============ */
+.toast {
+  position: fixed;
+  bottom: calc(42px + var(--sab));
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--win-yellow);
+  border: 1.5px solid var(--win-black);
+  box-shadow: 2px 2px 0 rgba(0,0,0,.5);
+  color: var(--win-black);
+  padding: 6px 14px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s, transform .2s;
+  z-index: 300;
+  max-width: calc(100% - 20px);
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ============ Скрываем старые чипсы ============ */
+.chips-bar, .chips-scroll {
+  display: none !important;
+}
+
+/* ============ МОБИЛЬНАЯ АДАПТАЦИЯ ============ */
+@media (max-width: 500px) {
+  .quick-icon-btn .qi-label { display: none; }
+  .quick-icon-btn { padding: 4px 8px; font-size: 16px; }
+
+  .start-menu-sidebar { width: 20px; font-size: 10px; }
+  .start-menu-items { min-width: 170px; }
+  .start-menu-item { padding: 6px 8px; font-size: 12px; }
+  .dropdown-menu { min-width: 160px; }
+
+  .recipe-detail h2 { font-size: 13px; }
+  .detail-actions button { font-size: 11px; padding: 4px 4px; }
+}
+
+/* ============ ГАРАНТИРОВАННОЕ СКРЫТИЕ ============ */
+.modal.hidden,
+.start-menu.hidden,
+.dropdown-menu.hidden,
+.start-submenu.hidden,
+.shutdown.hidden {
+  display: none !important;
+}
+
+/* ============ v3: ДИАЛОГИ, МЕНЮ, ВЫКЛЮЧЕНИЕ, ФОТО ============ */
+/* основное окно не перекрывает панель задач — «Пуск» доступен при открытой форме */
+#modal { bottom: calc(32px + var(--sab)); }
+#dlg { z-index: 250; }
+
+.dlg-body {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.dlg-big { font-size: 32px; line-height: 1; }
+.dlg-text { white-space: pre-line; flex: 1; }
+.dlg-radio {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 4px 0 4px 42px;
+  cursor: pointer;
+}
+
+#menuPop {
+  position: fixed;
+  z-index: 600;
+  min-width: 200px;
+}
+.dd-sep {
+  height: 2px;
+  margin: 3px 2px;
+  border-top: 1px solid var(--win-gray-dark);
+  border-bottom: 1px solid var(--win-white);
+}
+
+.file-input-wrap { display: flex; gap: 6px; }
+.file-input-wrap .file-input-label { flex: 1; margin: 0; }
+
+.recipe-card:focus-visible { outline: 1px dotted #ffff00; outline-offset: -3px; }
+
+.shutdown {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+  cursor: pointer;
+  font-family: "Lucida Console", "Courier New", monospace;
+  font-size: 16px;
+  line-height: 1.7;
+  user-select: none;
+}
+.shutdown[data-stage="splash"] { background: var(--win-teal); color: #fff; font-family: inherit; font-size: 18px; }
+.shutdown[data-stage="splash"] #sdOff { display: none; }
+.shutdown[data-stage="off"] { background: #000; color: #ff9e00; }
+.shutdown[data-stage="off"] #sdSplash { display: none; }
+.shutdown-hint { color: #808080; font-size: 11px; margin-top: 28px; }

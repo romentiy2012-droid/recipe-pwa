@@ -1,0 +1,44 @@
+﻿╤ЄЁєъЄєЁр яряюъ
+╤хЁшщэ√щ эюьхЁ Єюьр: E8B9-5F8A
+C:.
+|   .gitignore
+|   app.js
+|   index.html
+|   make_mega_db.py
+|   manifest.json
+|   README.md
+|   recipes-full-base.json
+|   styles.css
+|   sw.js
+|   WORKLOG.md
+|   
+\---icons
+        apple-touch-icon.png
+        icon-192.png
+        icon-512.png
+        icon-maskable-512.png
+        
+
+================ СПИСОК ФАЙЛОВ ================
+
+
+Mode   Length FullName                                                                               
+----   ------ --------                                                                               
+d-----        C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\icons                      
+-a---- 136    C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\.gitignore                 
+-a---- 40907  C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\app.js                     
+-a---- 11603  C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\index.html                 
+-a---- 208171 C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\make_mega_db.py            
+-a---- 843    C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\manifest.json              
+-a---- 1864   C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\README.md                  
+-a---- 151766 C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\recipes-full-base.json     
+-a---- 25118  C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\styles.css                 
+-a---- 1812   C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\sw.js                      
+-a---- 4262   C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\WORKLOG.md                 
+-a---- 4570   C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\icons\apple-touch-icon.png 
+-a---- 4917   C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\icons\icon-192.png         
+-a---- 13569  C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\icons\icon-512.png         
+-a---- 13569  C:\Users\romen\Desktop\Deepseek\files\recipe-pwa\recipe-pwa\icons\icon-maskable-512.png
+
+
+
