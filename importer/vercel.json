@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/page", "destination": "/api/import?kind=page" },
+    { "source": "/image", "destination": "/api/import?kind=image" }
+  ],
+  "functions": {
+    "api/import.mjs": { "maxDuration": 30 }
+  }
+}

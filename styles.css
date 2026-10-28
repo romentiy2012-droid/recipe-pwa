@@ -1170,3 +1170,38 @@ button:disabled { cursor: default; color: #777; }
   border: 2px inset #ddd; padding: 5px; background: white; color: black;
 }
 @media (pointer: coarse) { .ingredient-row input, #servings, #detailServings { font-size: 16px; } }
+
+/* v5: menu planning and cookbook tools */
+.book-filters { display: flex; gap: 10px; padding: 5px 8px; flex-wrap: wrap; flex-shrink: 0; }
+.book-filters select { max-width: 150px; }
+.book-actions { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+.week-nav { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.plan-day { border-bottom: 1px solid #888; padding: 8px 0; }
+.plan-day h3 { text-transform: capitalize; font-size: 14px; }
+.plan-entry { display: flex; justify-content: space-between; gap: 8px; align-items: center; margin: 6px 0; }
+.plan-entry span { min-width: 0; overflow-wrap: anywhere; }
+.plan-entry button { max-width: 100%; overflow-wrap: anywhere; }
+.recipe-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
+.recipe-tags span { display: inline-block; padding: 3px 6px; border: 1px inset #eee; margin: 3px; }
+.fridge-result { padding: 12px 0; border-bottom: 1px solid #888; line-height: 1.5; }
+#modalContent label { display: block; margin: 8px 0; }
+#modalContent .check-row { margin: 0; }
+#modalContent input[type=url], #modalContent input[type=search], #modalContent input[type=date],
+#connectionSettings input, #fridgeProducts, #webHtml, #planRecipe, #planMeal {
+  width: 100%; box-sizing: border-box; padding: 6px; min-width: 0; background: white; color: black; border: 2px inset #ddd; margin-top: 5px;
+}
+#modalContent details { margin: 14px 0; }
+#modalContent summary { cursor: pointer; padding: 7px; }
+#modalContent > button, .book-actions button, .week-nav button, .plan-entry button, #planAdd,
+#webCandidates button, #relatedDetail button, .fridge-result button, #connectionSettings button {
+  background: var(--win-gray); color: #000; border: 2px solid; border-color: #fff #404040 #404040 #fff;
+  padding: 7px 9px; min-height: 38px; cursor: pointer; margin: 3px 0;
+}
+#modalContent button:disabled { color: #777; cursor: default; }
+#relatedRecipes { max-height: 210px; overflow-y: auto; }
+@media (max-width: 420px) {
+  .kitchen-toolbar { gap: 3px; }
+  .kitchen-toolbar button { font-size: 11px; min-height: 32px; }
+  .book-filters { gap: 5px; padding: 4px; }
+  .book-filters select { max-width: 130px; }
+}

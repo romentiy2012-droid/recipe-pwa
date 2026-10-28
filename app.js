@@ -59,9 +59,9 @@ function run(storeName, mode, fn) {
   });
 }
 
-const dbAdd = r => run(STORE, 'readwrite', s => s.add(r));
-const dbPut = r => run(STORE, 'readwrite', s => s.put(r));
-const dbPutMany = list => run(STORE, 'readwrite', s => { list.forEach(x => s.put(x)); });
+const dbAdd = r => run(STORE, 'readwrite', s => s.add(Object.assign(r, Book.revise(r))));
+const dbPut = r => run(STORE, 'readwrite', s => s.put(Object.assign(r, Book.revise(r))));
+const dbPutMany = list => run(STORE, 'readwrite', s => { list.forEach(x => s.put(Object.assign(x, Book.revise(x)))); });
 const dbGetAllRaw = () => run(STORE, 'readonly', s => s.getAll());
 const dbGetAll = async () => (await dbGetAllRaw()).filter(r => !r.deletedAt);
 const metaGet = key => run(META_STORE, 'readonly', s => s.get(key));
@@ -270,6 +270,7 @@ async function refresh() {
   state.categories = cats;
   if (state.filterCat !== 'all' && !cats.includes(state.filterCat)) state.filterCat = 'all';
   updateFilterLabel();
+  updateBookFilters(recipes);
   renderList(recipes);
   renderCategoryMenu(recipes);
   await updateBackupStatus();
@@ -288,9 +289,11 @@ function renderList(all) {
     recipes = recipes.filter(r =>
       (r.title || '').toLowerCase().includes(q) ||
       (r.ingredients || '').toLowerCase().includes(q) ||
-      (r.description || '').toLowerCase().includes(q));
+      (r.description || '').toLowerCase().includes(q) ||
+      (r.notes || '').toLowerCase().includes(q) || Book.tags(r.tags).some(t => t.toLowerCase().includes(q)));
   }
-  recipes = recipes.slice().sort((a, b) => b.id - a.id);
+  if (state.tag) recipes = recipes.filter(r => Book.tags(r.tags).includes(state.tag));
+  recipes = recipes.slice().sort((a, b) => state.sort === 'title' ? a.title.localeCompare(b.title, 'ru') : state.sort === 'updated' ? (b.updatedAt || 0) - (a.updatedAt || 0) : state.sort === 'oldest' ? (a.createdAt || a.id) - (b.createdAt || b.id) : (b.createdAt || b.id) - (a.createdAt || a.id));
 
   revokeAll(listUrls);
   recipesEl.innerHTML = '';
@@ -365,6 +368,7 @@ function formHTML(recipe) {
   if (r.category && !cats.includes(r.category)) cats.push(r.category);
   const selected = r.category || defaultCategory();
   return '<form id="recipeForm" novalidate>' +
+    '<input type="hidden" id="recipeUuid" value="' + escapeHtml(r.uuid || '') + '">' +
     '<input type="hidden" id="recipeId" value="' + (r.id || '') + '">' +
     '<label>Название:<input type="text" id="title" required maxlength="200" placeholder="Например: Борщ" value="' + escapeHtml(r.title) + '" autocomplete="off"></label>' +
     '<label>Описание:<textarea id="description" rows="2" placeholder="Краткое описание">' + escapeHtml(r.description || '') + '</textarea></label>' +
@@ -386,6 +390,10 @@ function formHTML(recipe) {
     '<p class="field-hint">Укажи, на сколько порций рассчитаны продукты. Количество можно оставить пустым: например, соль по вкусу.</p>' +
     '<fieldset><legend>Ингредиенты</legend><div id="ingredientRows"></div><button type="button" id="addIngredient">➕ Продукт</button></fieldset>' +
     '<label>Приготовление:<textarea id="steps" rows="6" placeholder="1. Нарезать...&#10;2. Варить...">' + escapeHtml(r.steps || '') + '</textarea></label>' +
+    '<label>Теги через запятую:<input type="text" id="recipeTags" value="' + escapeHtml(Book.tags(r.tags).join(', ')) + '" placeholder="быстро, выпечка, семейное"></label>' +
+    '<label>Мои заметки:<textarea id="recipeNotes" rows="3">' + escapeHtml(r.notes || '') + '</textarea></label>' +
+    '<label>Источник:<input type="url" id="recipeSource" value="' + escapeHtml(r.sourceUrl || '') + '" placeholder="https://..."></label>' +
+    '<details><summary>Связанные рецепты</summary><div id="relatedRecipes"></div></details>' +
     '<div class="actions">' +
       '<button type="button" id="cancelBtn" class="btn-secondary">Отмена</button>' +
       '<button type="submit" class="btn-primary">OK</button>' +
@@ -415,6 +423,8 @@ function bindForm(recipe) {
   if (state.currentImage) setPreview(state.currentImage);
 
   renderIngredientRows(Kitchen.items(recipe || {}));
+  state.relatedUuids = recipe?.relatedUuids || [];
+  state.relatedReady = bindBookForm(recipe).catch(bookError);
   $('#addIngredient').onclick = () => { appendIngredientRow(); state.formDirty = true; scheduleDraft(); };
   const markDirty = () => { state.formDirty = true; scheduleDraft(); };
   form.addEventListener('input', markDirty);
@@ -440,6 +450,7 @@ function bindForm(recipe) {
   $('#imageGal').addEventListener('change', onFile);
 
   $('#removeImage').addEventListener('click', () => {
+    state.imageRequest = null; state.imageLoading = false;
     state.currentImage = null;
     setPreview(null);
     state.formDirty = true;
@@ -466,7 +477,14 @@ async function saveFormImpl() {
   if (!servings || !Number.isInteger(servings) || servings > 10000) { toast('Укажи целое число порций от 1 до 10000'); $('#servings').focus(); return false; }
   const ingredientItems = readIngredientRows();
   if (!ingredientItems) return false;
+  await state.relatedReady;
+  if (!$('#recipeForm')) return false;
+  const source = $('#recipeSource').value.trim();
+  if (source && !Book.url(source)) { toast('Источник должен быть ссылкой http:// или https://'); return false; }
   const data = {
+    uuid: $('#recipeUuid').value || crypto.randomUUID(),
+    notes: $('#recipeNotes').value.slice(0, 20000).trim(), tags: Book.tags($('#recipeTags').value), sourceUrl: Book.url(source),
+    relatedUuids: [...$$('#relatedRecipes input:checked')].map(el => el.value),
     title,
     servings,
     ingredientItems,
@@ -482,6 +500,7 @@ async function saveFormImpl() {
     if (id) {
       data.id = Number(id);
       const old = await dbGet(data.id);
+      if (old) { data.revisionId = old.revisionId; data.ancestors = old.ancestors; }
       if (old && old.favorite) data.favorite = true;
       data.createdAt = (old && old.createdAt) || Date.now();
       await dbPut(data);
@@ -516,6 +535,7 @@ function openModal() {
 }
 
 function closeModal(opts = {}) {
+  if (cloudBusy) { toast('Дождись завершения синхронизации'); return; }
   stopCooking();
   $('#modal').classList.add('hidden');
   $('#modalContent').innerHTML = '';
@@ -533,6 +553,7 @@ function closeModal(opts = {}) {
 
 // Закрытие с проверкой несохранённых данных. true — закрыто.
 async function requestCloseModal(opts = {}) {
+  if (cloudBusy) { toast('Дождись завершения синхронизации'); return false; }
   if (!isModalOpen()) return true;
   if (state.formDirty) {
     const a = await ask({ title: 'Рецепт', icon: '❓', text: 'Рецепт изменён. Сохранить изменения?', buttons: YNC, cancelId: 'cancel' });
@@ -587,7 +608,12 @@ async function showDetail(id) {
       (r.servings ? '<label>Порций: <input id="detailServings" type="number" min="1" max="10000" step="1" value="' + r.servings + '"></label>' : '<p class="field-hint">Для пересчёта укажи исходные порции в редакторе рецепта.</p>') +
       (ingredients ? '<h3>Ингредиенты</h3><ul id="detailIngredients" class="ingredients-list">' + ingredients + '</ul>' : '') +
       (r.steps ? '<h3>Приготовление</h3><div class="steps-text">' + escapeHtml(r.steps) + '</div>' : '') +
+      (r.tags?.length ? '<p class="recipe-tags">' + r.tags.map(t => '<span>' + escapeHtml(t) + '</span>').join(' ') + '</p>' : '') +
+      (r.notes ? '<h3>Мои заметки</h3><p class="recipe-notes">' + escapeHtml(r.notes) + '</p>' : '') +
+      (Book.url(r.sourceUrl) ? '<p>Источник: <a href="' + escapeHtml(Book.url(r.sourceUrl)) + '" target="_blank" rel="noopener noreferrer">Открыть сайт ↗</a></p>' : '') +
+      '<div id="relatedDetail"></div>' +
       '<div class="detail-actions">' +
+        '<button id="dPlan">📅 В меню</button><button id="dPdf">PDF</button>' +
         '<button id="dCook">👨‍🍳 Готовлю</button><button id="dShare">📤 Поделиться</button><button id="dShop">🛒 В покупки</button>' +
         '<button class="edit-btn" id="dEdit">Изменить</button>' +
         '<button class="delete-btn" id="dDelete">Удалить</button>' +
@@ -606,6 +632,9 @@ async function showDetail(id) {
     if (n === false) return;
     if ($('#detailIngredients')) $('#detailIngredients').innerHTML = Kitchen.scaled(r, n).map(i => '<li>' + escapeHtml(Kitchen.line(i)) + '</li>').join('');
   };
+  bookClick($('#dPlan'), () => showPlanner(r));
+  bookClick($('#dPdf'), () => { const n = selectedServings(); if (n !== false) return exportBookPDF(r, n); });
+  detailBookTools(r).catch(bookError);
   $('#dCook').onclick = () => { const n = selectedServings(); if (n !== false) startCooking(r, n); };
   $('#dShare').onclick = () => { const n = selectedServings(); if (n !== false) shareRecipe(r, n); };
   $('#dShop').onclick = () => { const n = selectedServings(); if (n !== false) addToShopping([{ recipe: r, servings: n }]).catch(() => toast('Не удалось сохранить покупки')); };
@@ -665,15 +694,7 @@ async function deleteCategory(cat) {
 // ====== ЭКСПОРТ / ИМПОРТ ======
 async function exportData() {
   try {
-    const [recipes, cats] = await Promise.all([dbGetAllRaw(), catGetAll()]);
-    const shopping = (await metaGet('shopping'))?.value || [];
-    const out = { app: 'recipes98', version: 2, shopping, exportedAt: new Date().toISOString(), categories: cats, recipes: [] };
-    for (const r of recipes) {
-      const { id, image, ...rest } = r;
-      const blob = normalizeImage(image);
-      rest.image = blob ? await blobToDataUrl(blob) : null;
-      out.recipes.push(rest);
-    }
+    const out = await createBookSnapshot();
     const file = new Blob([JSON.stringify(out)], { type: 'application/json' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(file);
@@ -718,10 +739,15 @@ async function importData(file) {
       const title = str(x.title, 200).trim();
       if (!title) { skipped++; continue; }
       const createdAt = Number.isFinite(x.createdAt) ? x.createdAt : Date.now();
-      if (known.has(title + '|' + createdAt)) { skipped++; continue; }
+      if (known.has(title + '|' + createdAt) || (x.uuid && existing.some(r => r.uuid === x.uuid))) { skipped++; continue; }
       known.add(title + '|' + createdAt);
       toAdd.push({
         title,
+        uuid: Book.clean(x.uuid, 150) || crypto.randomUUID(),
+        revisionId: Book.clean(x.revisionId, 150) || crypto.randomUUID(),
+        ancestors: (Array.isArray(x.ancestors) ? x.ancestors : []).filter(a => typeof a === 'string').slice(-100),
+        notes: Book.clean(x.notes), tags: Book.tags(x.tags), sourceUrl: Book.url(x.sourceUrl),
+        relatedUuids: (Array.isArray(x.relatedUuids) ? x.relatedUuids : []).filter(v => typeof v === 'string').slice(0, 500),
         description: str(x.description, 1000),
         category: addCat(x.category) || OTHER,
         ingredients: str(x.ingredients, 20000),
@@ -741,6 +767,11 @@ async function importData(file) {
     if (Array.isArray(obj.shopping) && !(await metaGet('shopping'))?.value?.length) {
       await metaPut('shopping', obj.shopping.slice(0, 5000).filter(i => i && typeof i.name === 'string').map(i => ({ name: str(i.name, 500), amount: Kitchen.quantity(i.amount), unit: str(i.unit, 30), checked: i.checked === true })));
     }
+    const plans = Book.validPlan((await metaGet('planner'))?.value);
+    const ids = new Set(plans.map(p => p.id));
+    await metaPut('planner', plans.concat(Book.validPlan(obj.planner).filter(p => !ids.has(p.id))));
+    const tombstones = (await metaGet('tombstones'))?.value || [];
+    if (Array.isArray(obj.tombstones)) await metaPut('tombstones', [...new Map(tombstones.concat(obj.tombstones.filter(t => t && typeof t.uuid === 'string' && Number.isFinite(t.deletedAt))).map(t => [t.uuid, t])).values()]);
     await refresh();
   } catch (err) { console.error(err); toast('Ошибка импорта'); }
 }
@@ -803,13 +834,19 @@ function showMenuPop(key, anchor) {
 
 // ====== ДЕЙСТВИЯ ======
 // Действия, которые переключают/заменяют экран, сначала аккуратно закрывают открытую форму
-const NEEDS_CLOSE = new Set(['create', 'recipes', 'favorites', 'clear-all', 'import', 'set-cat', 'shopping', 'trash', 'draft', 'backup']);
+const NEEDS_CLOSE = new Set(['create', 'recipes', 'favorites', 'clear-all', 'import', 'set-cat', 'shopping', 'trash', 'draft', 'backup', 'planner', 'fridge', 'web-import', 'cloud', 'pdf']);
 
 async function runAction(a, arg) {
+  if (cloudBusy) { toast('Дождись завершения синхронизации'); return; }
   if (NEEDS_CLOSE.has(a) && isModalOpen()) {
     if (!(await requestCloseModal())) return;
   }
   switch (a) {
+    case 'planner': await showPlanner(); break;
+    case 'fridge': await showFridge(); break;
+    case 'web-import': await showWebImport(); break;
+    case 'cloud': await showCloud(); break;
+    case 'pdf': await exportBookPDF(); break;
     case 'create': if (await offerDraft()) break; openFormModal(null); break;
     case 'draft': if (!(await offerDraft())) toast('Сохранённых черновиков нет'); break;
     case 'shopping': await showShopping(); break;
@@ -822,7 +859,7 @@ async function runAction(a, arg) {
     case 'import': $('#importFile').click(); break;
     case 'clear-all': await clearAll(); break;
     case 'about':
-      await ask({ title: 'О программе', icon: 'ℹ️', text: 'Мои рецепты 98\nВерсия 4.0\n\nПрогрессивное веб-приложение в стиле Windows 98\n\n© 2026' });
+      await ask({ title: 'О программе', icon: 'ℹ️', text: 'Мои рецепты 98\nВерсия 5.0\n\nПрогрессивное веб-приложение в стиле Windows 98\n\n© 2026' });
       break;
     case 'shutdown': await shutdownFlow(); break;
   }
@@ -1055,7 +1092,7 @@ function readIngredientRows(validate = true) {
 let draftTimer, draftQueue = Promise.resolve(), draftWarning = false;
 function draftSnapshot() {
   if (!$('#recipeForm') || !isModalOpen() || !state.formDirty) return null;
-  return { id: Number($('#recipeId').value) || null, title: $('#title').value, description: $('#description').value,
+  return { uuid: $('#recipeUuid').value, notes: $('#recipeNotes').value, tags: Book.tags($('#recipeTags').value), sourceUrl: $('#recipeSource').value, relatedUuids: $('#relatedRecipes').dataset.ready ? [...$$('#relatedRecipes input:checked')].map(el => el.value) : state.relatedUuids, id: Number($('#recipeId').value) || null, title: $('#title').value, description: $('#description').value,
     category: $('#category').value, servings: $('#servings').value, ingredientItems: readIngredientRows(false),
     steps: $('#steps').value, image: state.currentImage, savedAt: Date.now() };
 }
@@ -1128,6 +1165,7 @@ function mutateShopping(fn) {
     const current = (await metaGet('shopping'))?.value || [];
     const next = fn(current);
     await metaPut('shopping', next);
+    await metaPut('shoppingUpdatedAt', Date.now());
     return next;
   });
   shoppingQueue = task.catch(() => {});
@@ -1191,6 +1229,8 @@ async function showTrash() {
   $$('[data-purge]').forEach(el => el.onclick = async () => {
     const a = await ask({ title: 'Удалить навсегда?', icon: '⚠️', text: 'Восстановить этот рецепт из корзины уже не получится.', buttons: [{ id: 'delete', label: 'Удалить навсегда' }, { id: 'cancel', label: 'Отмена', primary: true }], cancelId: 'cancel' });
     if (a !== 'delete') return;
+    const r = await dbGet(Number(el.dataset.purge));
+    if (r?.uuid) { const tombstones = (await metaGet('tombstones'))?.value || []; await metaPut('tombstones', tombstones.concat({ uuid: r.uuid, deletedAt: Date.now() })); }
     await dbDelete(Number(el.dataset.purge)); await showTrash();
   });
   $('#closeTrash').onclick = () => closeModal(); openModal();
@@ -1236,6 +1276,7 @@ document.addEventListener('click', e => {
     return;
   }
   await migrateImages();
+  await initBook();
 
   const saved = lsGet('filterCat');
   if (saved) state.filterCat = saved;       // если категории уже нет — refresh() сбросит на «Все»
@@ -1245,6 +1286,8 @@ document.addEventListener('click', e => {
   setInterval(updateClock, 30000);
   await refresh();
   if ((await metaGet('draft'))?.value) $('#draftBanner').classList.remove('hidden');
+
+  await handleSharedRecipe();
 
   // Просим браузер не вычищать хранилище (особенно важно для iOS Safari)
   try { if (navigator.storage && navigator.storage.persist) await navigator.storage.persist(); } catch { /* ignore */ }

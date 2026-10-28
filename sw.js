@@ -1,6 +1,7 @@
-const CACHE_NAME = 'recipes-v4';
+const CACHE_NAME = 'recipes-v5';
 const ASSETS = [
-  './', './index.html', './styles.css', './app.js', './kitchen.js', './manifest.json',
+  './', './index.html', './styles.css', './app.js', './kitchen.js', './book-core.js', './book.js', './cloud.js', './config.js',
+  './vendor/jspdf.umd.min.js', './vendor/book-font.js', './manifest.json',
   './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png',
   './icons/apple-touch-icon.png'
 ];

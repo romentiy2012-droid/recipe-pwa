@@ -1,0 +1,7 @@
+name = "recipes98-import"
+main = "worker.mjs"
+compatibility_date = "2026-10-28"
+
+[vars]
+ALLOWED_ORIGIN = "https://romentiy2012-droid.github.io"
+ALLOWED_HOSTS = "1000.menu,povarenok.ru,russianfood.com,food.ru,eda.ru,edimdoma.ru,allrecipes.com,bbcgoodfood.com,recipetineats.com,seriouseats.com,simplyrecipes.com"

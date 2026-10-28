@@ -80,8 +80,9 @@
         </div>
       </div>
 
-      <div class="kitchen-toolbar"><button data-extra-action="shopping">🛒 Покупки</button><button data-extra-action="trash">🗑️ Корзина</button><button data-extra-action="backup">💾 Резервная копия</button></div>
+      <div class="kitchen-toolbar"><button data-extra-action="web-import">🌐 Из интернета</button><button data-extra-action="planner">📅 Меню</button><button data-extra-action="fridge">🥕 Холодильник</button><button data-extra-action="cloud">☁️ Облако</button><button data-extra-action="pdf">📄 Книга PDF</button><button data-extra-action="shopping">🛒 Покупки</button><button data-extra-action="trash">🗑️ Корзина</button><button data-extra-action="backup">💾 Резервная копия</button></div>
 
+<div class="book-filters"><label>Порядок <select id="recipeSort"><option value="newest">Сначала новые</option><option value="oldest">Сначала старые</option><option value="title">По названию</option><option value="updated">По изменениям</option></select></label><label>Тег <select id="tagFilter"><option value="">Все теги</option></select></label></div>
       <!-- Панель адреса -->
       <div class="address-bar">
         <label>Адрес:</label>
@@ -289,6 +290,10 @@
   <div id="toast" class="toast"></div>
 
   <script src="kitchen.js"></script>
+  <script src="book-core.js"></script>
+  <script src="config.js"></script>
+  <script src="book.js"></script>
+  <script src="cloud.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -100,7 +100,7 @@ const assert = require('node:assert/strict');
     const download = await downloadPromise;
     const fs = require('node:fs');
     const backup = JSON.parse(fs.readFileSync(await download.path(), 'utf8'));
-    assert.equal(backup.version, 2); assert.equal(backup.recipes.length, 2); assert.equal(backup.shopping.length, 3);
+    assert.equal(backup.version, 3); assert.equal(backup.recipes.length, 2); assert.equal(backup.shopping.length, 3);
     assert.equal(backup.recipes.find(r => r.title === 'Старый борщ').favorite, true);
     assert.ok(backup.recipes.find(r => r.title === 'Черновик пирога').deletedAt);
     const restoreContext = await browser.newContext({ viewport: { width: 320, height: 700 } });
