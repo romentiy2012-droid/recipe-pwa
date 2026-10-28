@@ -80,6 +80,8 @@
         </div>
       </div>
 
+      <div class="kitchen-toolbar"><button data-extra-action="shopping">🛒 Покупки</button><button data-extra-action="trash">🗑️ Корзина</button><button data-extra-action="backup">💾 Резервная копия</button></div>
+
       <!-- Панель адреса -->
       <div class="address-bar">
         <label>Адрес:</label>
@@ -97,6 +99,8 @@
             <p>Пока нет рецептов</p>
             <p class="empty-hint">Нажмите <b>Создать</b> на панели инструментов</p>
           </div>
+          <div id="draftBanner" class="notice hidden">📝 Есть несохранённый черновик. <button data-extra-action="draft">Восстановить</button></div>
+          <div id="backupBanner" class="notice hidden"></div>
           <div id="recipes" class="recipes"></div>
         </div>
       </div>
@@ -284,6 +288,7 @@
   <!-- ============ TOAST ============ -->
   <div id="toast" class="toast"></div>
 
+  <script src="kitchen.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

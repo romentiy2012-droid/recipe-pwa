@@ -1,0 +1,12 @@
+{
+  "name": "recipes98",
+  "version": "4.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/kitchen.test.cjs",
+    "test:browser": "node tests/browser.cjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

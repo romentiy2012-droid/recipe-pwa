@@ -1128,3 +1128,45 @@ form select { cursor: pointer; padding: 2px; }
 .shutdown[data-stage="off"] { background: #000; color: #ff9e00; }
 .shutdown[data-stage="off"] #sdSplash { display: none; }
 .shutdown-hint { color: #808080; font-size: 11px; margin-top: 28px; }
+
+/* Kitchen tools keep the existing Windows 98 palette and bevels. */
+.kitchen-toolbar { display: flex; gap: 6px; padding: 5px 8px; flex-wrap: wrap; border-bottom: 1px solid #808080; }
+.kitchen-toolbar button, .notice button { padding: 5px 9px; }
+.notice { background: #ffffdd; border: 1px solid #808080; padding: 10px; margin: 8px; line-height: 1.5; }
+.field-hint { font-size: 12px; line-height: 1.5; margin: 8px 0; color: #444; }
+fieldset { min-width: 0; margin: 12px 0; padding: 10px; }
+.ingredient-row { display: grid; grid-template-columns: minmax(90px, 1fr) 75px 70px 32px; gap: 5px; margin-bottom: 7px; }
+.ingredient-row input { min-width: 0; width: 100%; margin: 0; }
+.ingredient-row button { min-width: 30px; }
+.check-row { display: flex !important; align-items: center; gap: 12px; padding: 10px 4px; line-height: 1.5; cursor: pointer; }
+.check-row input[type=checkbox] { flex: 0 0 22px; width: 22px; height: 22px; margin: 0; }
+.check-row:has(input:checked) span { text-decoration: line-through; opacity: .6; }
+.cooking { font-size: 18px; line-height: 1.6; }
+.cook-step { background: #fff; border: 2px inset #ddd; padding: 18px; font-size: 24px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.cook-nav { display: flex; gap: 12px; margin: 16px 0; }
+.cook-nav button { flex: 1; min-height: 50px; font-size: 18px; }
+.shopping-recipe { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin: 8px 0; }
+.shopping-recipe label { flex: 1; }
+.shopping-recipe input[type=number], #detailServings, #servings { width: 90px; }
+.trash-row { border-bottom: 1px solid #808080; padding: 12px 0; overflow-wrap: anywhere; }
+.trash-row button { margin: 8px 6px 0 0; min-height: 40px; }
+.detail-actions { flex-wrap: wrap; }
+.detail-actions button { min-height: 40px; }
+@media (max-width: 420px) {
+  .ingredient-row { grid-template-columns: minmax(70px, 1fr) 60px 55px 30px; gap: 3px; }
+  .kitchen-toolbar { gap: 4px; }
+  .kitchen-toolbar button { padding: 6px; }
+}
+.notice.hidden { display: none; }
+.kitchen-toolbar, .notice { flex-shrink: 0; }
+.kitchen-toolbar button, .notice button, .ingredient-row button, #addIngredient,
+.cook-nav button, #cookExit, .trash-row button, #buildShopping, #closeTrash, #clearBought, #closeShopping {
+  background: var(--win-gray); color: #000; border: 2px solid;
+  border-color: #fff #404040 #404040 #fff; padding: 6px 8px; cursor: pointer; min-height: 36px;
+}
+.cook-nav button { min-height: 50px; }
+button:disabled { cursor: default; color: #777; }
+.ingredient-row input, #servings, #detailServings, .shopping-recipe input[type=number] {
+  border: 2px inset #ddd; padding: 5px; background: white; color: black;
+}
+@media (pointer: coarse) { .ingredient-row input, #servings, #detailServings { font-size: 16px; } }
