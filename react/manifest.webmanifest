@@ -1,0 +1,23 @@
+{
+  "name": "Мои рецепты — новая версия",
+  "short_name": "Рецепты",
+  "description": "Моя кулинарная книга",
+  "lang": "ru",
+  "start_url": "/recipe-pwa/react/",
+  "scope": "/recipe-pwa/react/",
+  "display": "standalone",
+  "background_color": "#f3f7f1",
+  "theme_color": "#f3f7f1",
+  "icons": [
+    {
+      "src": "/recipe-pwa/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/recipe-pwa/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
