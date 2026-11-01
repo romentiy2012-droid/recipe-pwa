@@ -1,0 +1,3 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+:root{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#19352b;background:#f3f7f1}*{box-sizing:border-box}body{margin:0}input,textarea,select{font:inherit}button{touch-action:manipulation} .safe-bottom{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 12px)}.safe-top{padding-top:env(safe-area-inset-top,0px)}
