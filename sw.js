@@ -1,4 +1,4 @@
-const CACHE_NAME = 'recipes-v5-modern1';
+const CACHE_NAME = 'recipes-v5-modern2';
 const ASSETS = [
   './', './index.html', './styles.css', './modern.css', './modern.js', './app.js', './kitchen.js', './book-core.js', './book.js', './cloud.js', './config.js',
   './vendor/jspdf.umd.min.js', './vendor/book-font.js', './manifest.json',
