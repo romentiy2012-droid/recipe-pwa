@@ -60,3 +60,26 @@ body.modern-ui {
  .modern-ui .modal-sheet{border-radius:18px 18px 0 0}
 }
 @media(prefers-reduced-motion:reduce){.modern-ui *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Mobile tab bar: no data model changes */
+.modern-bottom-nav{display:none}
+@media(max-width:700px){
+ body.modern-ui .desktop{bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+ body.modern-ui .main-window{bottom:0}
+ body.modern-ui .modern-bottom-nav{
+  display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;
+  min-height:calc(65px + env(safe-area-inset-bottom,0px));
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom,0px));
+  background:#fff;border-top:1px solid #e1e9e2;
+  box-shadow:0 -5px 24px #1639250e;justify-content:space-around;gap:2px
+ }
+ .modern-bottom-nav button{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;border:0;background:transparent;border-radius:12px;color:#64766b;
+  min-height:47px;font-size:22px;cursor:pointer
+ }
+ .modern-bottom-nav button small{font-size:10px;font-weight:650}
+ .modern-bottom-nav button[data-active="true"]{background:#eaf5ed;color:#256a49}
+ body:not(.modern-ui) .modern-bottom-nav{display:none}
+}
+@media(min-width:701px){.modern-bottom-nav{display:none!important}}
