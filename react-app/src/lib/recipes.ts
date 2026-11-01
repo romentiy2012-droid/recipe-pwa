@@ -47,6 +47,6 @@ export async function importRecipes(db:IDBDatabase,file:File):Promise<{added:num
  return {added,skipped};
 }
 export function scaledIngredients(r:Recipe,servings:number):string[]{
- if(!r.ingredientItems?.length||!r.servings||r.servings<=0)return ingredientLines(r);
- return r.ingredientItems.filter(x=>x.name).map(x=>x.name+(x.amount!=null?" — "+Number((x.amount*servings/r.servings).toFixed(3)).toLocaleString("ru-RU"):"")+(x.unit?" "+x.unit:""));
+ const base=r.servings;if(!r.ingredientItems?.length||!base||base<=0)return ingredientLines(r);
+ return r.ingredientItems.filter(x=>x.name).map(x=>x.name+(x.amount!=null?" — "+Number((x.amount*servings/base).toFixed(3)).toLocaleString("ru-RU"):"")+(x.unit?" "+x.unit:""));
 }
