@@ -1,0 +1,85 @@
+/* Modern UI layer: original Windows 98 theme remains available. */
+body.modern-ui {
+ --win-gray:#ffffff;--win-gray-light:#f8fafc;--win-gray-dark:#cbd5e1;
+ --win-gray-darker:#64748b;--win-navy:#174a3c;--win-teal:#f4f7f2;
+ --win-blue:#2e7857;--win-yellow:#fef9e7;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+ font-size:15px;color:#1f2937;background:#f4f7f2;
+}
+.modern-ui .desktop{background:#f4f7f2;padding:0;inset:0}
+.modern-ui .main-window{inset:0;position:absolute;max-width:1180px;margin:auto;border:0;box-shadow:none;background:transparent}
+.modern-ui .title-bar{background:transparent;color:#163d30;padding:16px 18px 8px;min-height:62px}
+.modern-ui .title-bar-text{font-size:20px;font-weight:750;letter-spacing:-.5px}
+.modern-ui .main-window>.title-bar .title-icon{font-size:24px}
+.modern-ui .main-window>.title-bar .title-bar-controls,
+.modern-ui .menu-bar,.modern-ui .address-bar,
+.modern-ui .taskbar,.modern-ui .status-bar{display:none!important}
+.modern-ui .quick-icons{background:transparent;border:0;padding:3px 14px 12px;gap:8px}
+.modern-ui .quick-icon-btn{border:1px solid #e1e9e2;background:#fff;border-radius:12px;box-shadow:0 1px 3px #203b2610;min-height:48px;padding:8px 14px;font-size:15px}
+.modern-ui .quick-icon-btn .qi-label{font-size:13px}
+.modern-ui .toolbar{background:transparent;border:0;padding:8px 14px;gap:8px}
+.modern-ui .toolbar-btn,.modern-ui .kitchen-toolbar button,.modern-ui .book-actions button,
+.modern-ui #modalContent button,.modern-ui .notice button,.modern-ui .dropdown-toggle,
+.modern-ui .actions button,.modern-ui .week-nav button,.modern-ui .plan-entry button{
+ border:1px solid #dce7df!important;border-radius:12px!important;background:white!important;
+ color:#214533!important;box-shadow:none!important;padding:10px 13px;min-height:43px;font-size:14px;
+}
+.modern-ui #addBtn,.modern-ui .btn-primary{background:#287851!important;color:white!important;border-color:#287851!important}
+.modern-ui .toolbar-search{background:#fff;border:1px solid #dce7df;border-radius:12px;padding:5px 10px;min-height:46px;flex:1}
+.modern-ui .toolbar-search input{background:transparent;border:0;outline:0;font-size:16px;width:100%}
+.modern-ui .kitchen-toolbar{padding:8px 14px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin;background:transparent}
+.modern-ui .kitchen-toolbar button{flex:0 0 auto}
+.modern-ui .book-filters{padding:8px 14px;color:#52685a}
+.modern-ui .book-filters select,.modern-ui select,.modern-ui input,.modern-ui textarea{
+ font-family:inherit;font-size:16px;border-radius:9px;border:1px solid #cbd9ce;background:#fff;color:#233c2e;
+}
+.modern-ui .window-body{background:transparent;border:0;box-shadow:none;min-height:0}
+.modern-ui .content-area{padding:12px 14px 34px;background:transparent}
+.modern-ui .recipes{gap:14px}
+.modern-ui .recipe-card{border:1px solid #e2eae2!important;border-radius:17px!important;background:#fff!important;box-shadow:0 5px 22px #1941280d!important;overflow:hidden}
+.modern-ui .recipe-card button{border-radius:10px}
+.modern-ui .empty{background:#fff;border:1px dashed #c8d8ce;border-radius:18px;padding:35px 15px;margin:16px 0}
+.modern-ui .modal{backdrop-filter:blur(3px)}
+.modern-ui .modal-sheet{background:#fff;border:0;border-radius:20px;box-shadow:0 22px 70px #0b241a3b;overflow:hidden}
+.modern-ui .modal-sheet>.title-bar{background:#e9f4ec;color:#174a37;padding:14px 18px;min-height:52px}
+.modern-ui .modal-sheet>.title-bar button{border:0;background:transparent;color:#174a37;font-size:22px}
+.modern-ui .modal-content{font-size:15px;line-height:1.55}
+.modern-ui .notice{border-radius:12px;background:#fff9e6;padding:12px;margin:5px 14px}
+.modern-ui button:focus-visible,.modern-ui input:focus-visible{outline:3px solid #8bd4a6;outline-offset:2px}
+#themeToggle{font-weight:650}
+@media(max-width:600px){
+ .modern-ui .main-window{bottom:0;top:0}
+ .modern-ui .title-bar{padding-top:calc(env(safe-area-inset-top,0px) + 12px)}
+ .modern-ui .toolbar{flex-wrap:wrap}
+ .modern-ui .toolbar-search{order:-1;flex-basis:100%}
+ .modern-ui .quick-icons{justify-content:space-between}
+ .modern-ui .quick-icon-btn{flex:1;padding:8px 4px}
+ .modern-ui .quick-icon-btn .qi-label{font-size:12px}
+ .modern-ui .kitchen-toolbar{padding-bottom:12px}
+ .modern-ui .content-area{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 25px)}
+ .modern-ui .modal-sheet{border-radius:18px 18px 0 0}
+}
+@media(prefers-reduced-motion:reduce){.modern-ui *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+
+/* Mobile tab bar: no data model changes */
+.modern-bottom-nav{display:none}
+@media(max-width:700px){
+ body.modern-ui .desktop{bottom:calc(68px + env(safe-area-inset-bottom,0px))}
+ body.modern-ui .main-window{bottom:0}
+ body.modern-ui .modern-bottom-nav{
+  display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;
+  min-height:calc(65px + env(safe-area-inset-bottom,0px));
+  padding:7px 8px calc(7px + env(safe-area-inset-bottom,0px));
+  background:#fff;border-top:1px solid #e1e9e2;
+  box-shadow:0 -5px 24px #1639250e;justify-content:space-around;gap:2px
+ }
+ .modern-bottom-nav button{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:2px;border:0;background:transparent;border-radius:12px;color:#64766b;
+  min-height:47px;font-size:22px;cursor:pointer
+ }
+ .modern-bottom-nav button small{font-size:10px;font-weight:650}
+ .modern-bottom-nav button[data-active="true"]{background:#eaf5ed;color:#256a49}
+ body:not(.modern-ui) .modern-bottom-nav{display:none}
+}
+@media(min-width:701px){.modern-bottom-nav{display:none!important}}
