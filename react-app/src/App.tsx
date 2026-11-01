@@ -1,5 +1,5 @@
 import {useEffect,useMemo,useState,useRef} from "react";
-import {BookOpen,Heart,Plus,Search,CalendarDays,ShoppingCart,Download,ArrowLeft,Save,Trash2,ImagePlus} from "lucide-react";
+import {BookOpen,Heart,Plus,Search,CalendarDays,ShoppingCart,Download,ArrowLeft,Save,Trash2,ImagePlus,ExternalLink} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {Card,CardContent,CardHeader,CardTitle} from "@/components/ui/card";
 import {type Recipe,openRecipesDB,listRecipes,addRecipe,saveRecipe,getRecipe,ingredientLines,exportRecipes,importRecipes,scaledIngredients} from "@/lib/recipes";
@@ -25,7 +25,7 @@ export default function App(){
  const openEdit=async(r:Recipe)=>{if(db&&r.id)setEditing({...await getRecipe(db,r.id)});setDetail(null)};
  const nav:[Tab,string,typeof BookOpen][]=[["recipes","Рецепты",BookOpen],["favorites","Избранное",Heart],["planner","Меню",CalendarDays],["shopping","Покупки",ShoppingCart]];
  return <div className="safe-top min-h-screen bg-[#f3f7f1] pb-28 text-slate-800">
- <header className="sticky top-0 z-10 border-b border-emerald-100 bg-[#f3f7f1]/95 px-4 py-4 backdrop-blur"><div className="mx-auto flex max-w-5xl items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Моя кухня</p><h1 className="text-2xl font-bold tracking-tight">Книга рецептов</h1></div><Button size="icon" aria-label="Добавить рецепт" onClick={()=>{setEditing(newRecipe());setDetail(null)}}><Plus/></Button></div></header>
+ <header className="sticky top-0 z-10 border-b border-emerald-100 bg-[#f3f7f1]/95 px-4 py-4 backdrop-blur"><div className="mx-auto flex max-w-5xl items-center justify-between"><div><p className="text-xs font-bold uppercase tracking-[.2em] text-emerald-700">Моя кухня</p><h1 className="text-2xl font-bold tracking-tight">Книга рецептов</h1></div><div className="flex items-center gap-2"><a href="/recipe-pwa/" className="inline-flex h-10 items-center gap-1 rounded-xl border border-emerald-200 bg-white px-3 text-xs font-medium text-emerald-800" title="PDF, облако, интернет-импорт и другие функции классической версии"><ExternalLink size={15}/> Больше функций</a><Button size="icon" aria-label="Добавить рецепт" onClick={()=>{setEditing(newRecipe());setDetail(null)}}><Plus/></Button></div></div></header>
  <main className="mx-auto max-w-5xl px-4 py-6">
  {error&&<div role="alert" className="mb-4 rounded-xl bg-red-50 p-3 text-red-700">{error} <button onClick={()=>setError("")} className="ml-3 underline">Закрыть</button></div>}
  {editing?<section className="mx-auto max-w-2xl space-y-4"><Button variant="ghost" onClick={()=>setEditing(null)}><ArrowLeft size={18}/> Назад</Button><h2 className="text-2xl font-bold">{editing.id?"Редактировать":"Новый рецепт"}</h2><form className="space-y-4" onSubmit={e=>{e.preventDefault();void persist()}}>
