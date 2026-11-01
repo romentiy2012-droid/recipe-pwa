@@ -1,0 +1,27 @@
+name: React migration checks
+on:
+  push:
+    paths:
+      - 'react-app/**'
+      - '.github/workflows/react-check.yml'
+  pull_request:
+    paths:
+      - 'react-app/**'
+      - '.github/workflows/react-check.yml'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: react-app
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm run build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: react-app-dist
+          path: react/
